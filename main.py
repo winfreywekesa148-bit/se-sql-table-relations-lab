@@ -44,7 +44,18 @@ ORDER BY employees.firstName, employees.lastName;
 
 # STEP 4
 # Replace None with your code
-df_contacts = None
+df_contacts = pd.read_sql(
+    """
+SELECT contactFirstName, contactLastName, phone, salesRepEmployeeNumber
+FROM customers
+WHERE orderNumber IN (
+SELECT orderNumber
+FROM orders
+GROUP BY orderNumber
+WHERE orderNumber = 'NULL'
+);
+"""
+)
 
 # STEP 5
 # Replace None with your code
