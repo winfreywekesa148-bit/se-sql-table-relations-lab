@@ -54,7 +54,7 @@ FROM orders
 GROUP BY orderNumber
 WHERE orderNumber = 'NULL'
 );
-"""
+""", conn
 )
 
 # STEP 5
@@ -65,12 +65,22 @@ SELECT customers.contactFirstName, customers.contactLastName, payments.amount, p
 FROM customer
 RIGHT JOIN payments
 ORDER BY payments.amount DESC;
-"""
+""", conn
 )
 
 # STEP 6
 # Replace None with your code
-df_credit = None
+df_credit = pd.read_sql(
+    """
+SELECT employees.employeeNumber, employees.firstName, employees.lastName, customers.customerNumber, customers.creditLimit
+FROM customers
+LEFT JOIN employees
+ON employees.employeeNumber = customers.salesRepEmployeeNumber
+GROUP BY customers.creditLimit
+ORDER BY customers.customerNumber DESC
+LIMIT 4;
+""", conn
+)
 
 # STEP 7
 # Replace None with your code
