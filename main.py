@@ -49,7 +49,7 @@ ORDER BY employees.firstName, employees.lastName;
 # Replace None with your code
 df_contacts = pd.read_sql(
     """
-SELECT customers.contactFirstName, customers.contactLastName, customers.phone, scustomers.salesRepEmployeeNumber
+SELECT customers.contactFirstName, customers.contactLastName, customers.phone, customers.salesRepEmployeeNumber
 FROM customers
 WHERE customers.customerNumber NOT IN (
 SELECT customerNumber
@@ -64,7 +64,8 @@ df_payment = pd.read_sql(
     """
 SELECT customers.contactFirstName, customers.contactLastName, payments.amount, payments.paymentDate
 FROM customer
-LEFT JOIN payments
+JOIN payments
+ON customers.customerNumber = payments.customerNumber
 ORDER BY payments.amount DESC;
 """, conn
 )
@@ -73,12 +74,13 @@ ORDER BY payments.amount DESC;
 # Replace None with your code
 df_credit = pd.read_sql(
     """
-SELECT employees.employeeNumber, employees.firstName, employees.lastName, customers.customerNumber, customers.creditLimit
-FROM customers
-LEFT JOIN employees
+SELECT employees.employeeNumber, employees.firstName, employees.lastName, COUNT(customers.customerNumber) AS num_customer
+FROM employees
+JOIN customers
 ON employees.employeeNumber = customers.salesRepEmployeeNumber
-GROUP BY customers.creditLimit
-ORDER BY customers.customerNumber DESC
+GROUP BY employees.employeeNumber, employees.firstName, employees.lastName
+HAVING AVG(customers.creditLimit) > 90000
+ORDER BY num_customers DESC
 LIMIT 4;
 """, conn
 )
