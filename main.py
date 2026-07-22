@@ -24,9 +24,9 @@ df_zero_emp = pd.read_sql(
     """
 SELECT * 
 FROM employees
-FULL JOIN offices
+LEFT JOIN offices
 ON employees.officeCode = offices.officeCode
-WHERE employees = 'NULL';
+WHERE employees.employeeNumber IS NULL;
 """, conn
 )
 
@@ -63,7 +63,7 @@ df_payment = pd.read_sql(
     """
 SELECT customers.contactFirstName, customers.contactLastName, payments.amount, payments.paymentDate
 FROM customer
-RIGHT JOIN payments
+LEFT JOIN payments
 ORDER BY payments.amount DESC;
 """, conn
 )
