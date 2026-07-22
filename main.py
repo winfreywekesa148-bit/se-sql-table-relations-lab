@@ -26,8 +26,8 @@ WHERE offices.city = 'Boston';
 df_zero_emp = pd.read_sql(
     """
 SELECT * 
-FROM employees
-LEFT JOIN offices
+FROM offices
+LEFT JOIN employees
 ON employees.officeCode = offices.officeCode
 WHERE employees.employeeNumber IS NULL;
 """, conn
@@ -39,7 +39,7 @@ df_employee = pd.read_sql(
     """
 SELECT employees.firstName, employees.lastName, offices.city, offices.state
 FROM employees
-JOIN offices
+LEFT JOIN offices
 ON employees.officeCode = offices.officeCode
 ORDER BY employees.firstName, employees.lastName;
 """, conn
