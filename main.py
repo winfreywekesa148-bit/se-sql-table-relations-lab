@@ -88,7 +88,14 @@ df_product_sold = None
 
 # STEP 8
 # Replace None with your code
-df_total_customers = None
+df_total_customers = pd.read_sql(
+    """
+SELECT customers.customerName AS n_customers, offices.officeCode, offices.city
+FROM customers
+JOIN customers
+ORDER BY offices.officeCode;
+""", conn
+)
 
 # STEP 9
 # Replace None with your code
@@ -96,6 +103,17 @@ df_customers = None
 
 # STEP 10
 # Replace None with your code
-df_under_20 = None
+df_under_20 = pd.read_sql(
+    """
+SELECT employeeNumber, firstName, lastName
+FROM emloyees
+WHERE officeCode IN (
+SELECT officeCode 
+FROM offices
+GROUP BY employeeNumber
+HAVING COUNT(officeCode) <20
+);
+""", conn
+)
 
 conn.close()
