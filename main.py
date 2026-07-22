@@ -49,14 +49,12 @@ ORDER BY employees.firstName, employees.lastName;
 # Replace None with your code
 df_contacts = pd.read_sql(
     """
-SELECT contactFirstName, contactLastName, phone, salesRepEmployeeNumber
+SELECT customers.contactFirstName, customers.contactLastName, customers.phone, scustomers.salesRepEmployeeNumber
 FROM customers
-WHERE orderNumber IN (
-SELECT orderNumber
-FROM orders
-GROUP BY orderNumber
-WHERE orderNumber = 'NULL'
-);
+WHERE customers.customerNumber NOT IN (
+SELECT customerNumber
+FROM orders)
+ORDER BY customers.contactLastName;
 """, conn
 )
 
