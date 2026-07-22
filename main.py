@@ -26,13 +26,21 @@ SELECT *
 FROM employees
 FULL JOIN offices
 ON employees.officeCode = offices.officeCode
-WHERE employees = NULL;
+WHERE employees = 'NULL';
 """, conn
 )
 
 # STEP 3
 # Replace None with your code
-df_employee = None
+df_employee = pd.read_sql(
+    """
+SELECT employees.firstName, employees.lastName, offices.city, offices.state
+FROM employees
+JOIN employees
+ON employees.officeCode = offices.officeCode
+ORDER BY employees.firstName, employees.lastName;
+""", conn
+)
 
 # STEP 4
 # Replace None with your code
