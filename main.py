@@ -20,7 +20,15 @@ FROM employees;
 
 # STEP 2
 # Replace None with your code
-df_zero_emp = None
+df_zero_emp = pd.read_sql(
+    """
+SELECT * 
+FROM employees
+FULL JOIN offices
+ON employees.officeCode = offices.officeCode
+WHERE employees = NULL;
+""", conn
+)
 
 # STEP 3
 # Replace None with your code
