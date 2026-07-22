@@ -36,7 +36,7 @@ df_employee = pd.read_sql(
     """
 SELECT employees.firstName, employees.lastName, offices.city, offices.state
 FROM employees
-JOIN employees
+JOIN offices
 ON employees.officeCode = offices.officeCode
 ORDER BY employees.firstName, employees.lastName;
 """, conn
