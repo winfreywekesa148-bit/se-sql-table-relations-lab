@@ -59,7 +59,14 @@ WHERE orderNumber = 'NULL'
 
 # STEP 5
 # Replace None with your code
-df_payment = None
+df_payment = pd.read_sql(
+    """
+SELECT customers.contactFirstName, customers.contactLastName, payments.amount, payments.paymentDate
+FROM customer
+RIGHT JOIN payments
+ORDER BY payments.amount DESC;
+"""
+)
 
 # STEP 6
 # Replace None with your code
