@@ -87,7 +87,20 @@ LIMIT 4;
 
 # STEP 7
 # Replace None with your code
-df_product_sold = None
+df_product_sold = pd.read_sql(
+    """
+    SELECT products.productName,
+           COUNT(orderdetails.orderNumber) AS numorders,
+           SUM(orderdetails.quantityOrdered) AS totalunits
+    FROM products
+    JOIN orderdetails
+        ON products.productCode = orderdetails.productCode
+    GROUP BY products.productCode,
+             products.productName
+    ORDER BY totalunits DESC;
+    """,
+    conn
+)
 
 # STEP 8
 # Replace None with your code
