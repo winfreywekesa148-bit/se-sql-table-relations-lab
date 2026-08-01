@@ -144,15 +144,32 @@ df_customers =  pd.read_sql(
 # Replace None with your code
 df_under_20 = pd.read_sql(
     """
-SELECT employeeNumber, firstName, lastName
-FROM employees
-WHERE officeCode IN (
-SELECT officeCode 
-FROM offices
-GROUP BY employeeNumber
-HAVING COUNT(officeCode) <20
-);
-""", conn
+SELECT DISTINCT
+        employees.employeeNumber,
+        employees.firstName,
+        employees.lastName,
+        orders.city,
+        orders.officeCode
+    FROM employees 
+    JOIN offices 
+        ON employees.officeCode = orders.officeCode
+    JOIN customers 
+        ON employees.employeeNumber = customers.salesRepEmployeeNumber
+    JOIN orders
+        ON customers.customerNumber = orders.customerNumber
+    JOIN orderdetails
+        ON orders.orderNumber = orderdetails.orderNumber
+    WHERE orderdetails.productCode IN (
+        SELECT orderdetails.productCode
+        FROM orderdetails 
+        JOIN orders 
+            ON orderdetails.orderNumber = orders.orderNumber
+        GROUP BY orderdetails.productCode
+        HAVING COUNT(DISTINCT orders.customerNumber) < 20
+    )
+    ORDER BY employees.employeeNumber;
+    """,
+    conn
 )
 
 conn.close()
