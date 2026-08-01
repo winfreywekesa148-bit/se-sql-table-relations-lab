@@ -63,7 +63,7 @@ ORDER BY customers.contactLastName;
 df_payment = pd.read_sql(
     """
 SELECT customers.contactFirstName, customers.contactLastName, payments.amount, payments.paymentDate
-FROM customer
+FROM customers
 JOIN payments
 ON customers.customerNumber = payments.customerNumber
 ORDER BY payments.amount DESC;
@@ -93,11 +93,19 @@ df_product_sold = None
 # Replace None with your code
 df_total_customers = pd.read_sql(
     """
-SELECT customers.customerName AS n_customers, offices.officeCode, offices.city
-FROM customers
-JOIN customers
-ORDER BY offices.officeCode;
-""", conn
+    SELECT COUNT(customers.customerNumber) AS n_customers,
+           offices.officeCode,
+           offices.city
+    FROM offices
+    LEFT JOIN employees
+        ON offices.officeCode = employees.officeCode
+    LEFT JOIN customers
+        ON employees.employeeNumber = customers.salesRepEmployeeNumber
+    GROUP BY offices.officeCode,
+             offices.city
+    ORDER BY offices.officeCode;
+    """,
+    conn
 )
 
 # STEP 9
@@ -124,7 +132,7 @@ df_customers =  pd.read_sql(
 df_under_20 = pd.read_sql(
     """
 SELECT employeeNumber, firstName, lastName
-FROM emloyees
+FROM employees
 WHERE officeCode IN (
 SELECT officeCode 
 FROM offices
