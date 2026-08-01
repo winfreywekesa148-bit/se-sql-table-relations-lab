@@ -148,12 +148,12 @@ SELECT DISTINCT
         employees.employeeNumber,
         employees.firstName,
         employees.lastName,
-        orders.city,
-        orders.officeCode
-    FROM employees 
-    JOIN offices 
-        ON employees.officeCode = orders.officeCode
-    JOIN customers 
+        offices.city,
+        offices.officeCode
+    FROM employees
+    JOIN offices
+        ON employees.officeCode = offices.officeCode
+    JOIN customers
         ON employees.employeeNumber = customers.salesRepEmployeeNumber
     JOIN orders
         ON customers.customerNumber = orders.customerNumber
@@ -161,8 +161,8 @@ SELECT DISTINCT
         ON orders.orderNumber = orderdetails.orderNumber
     WHERE orderdetails.productCode IN (
         SELECT orderdetails.productCode
-        FROM orderdetails 
-        JOIN orders 
+        FROM orderdetails
+        JOIN orders
             ON orderdetails.orderNumber = orders.orderNumber
         GROUP BY orderdetails.productCode
         HAVING COUNT(DISTINCT orders.customerNumber) < 20
