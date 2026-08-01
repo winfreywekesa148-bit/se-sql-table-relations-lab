@@ -65,8 +65,8 @@ df_payment = pd.read_sql(
 SELECT customers.contactFirstName, customers.contactLastName, payments.amount, payments.paymentDate
 FROM customers
 JOIN payments
-ON customers.customerNumber = payments.customerNumber
-ORDER BY payments.amount DESC;
+   ON customers.customerNumber = payments.customerNumber
+ORDER BY CAST(payments.amount AS REAL) DESC;
 """, conn
 )
 
@@ -74,7 +74,7 @@ ORDER BY payments.amount DESC;
 # Replace None with your code
 df_credit = pd.read_sql(
     """
-SELECT employees.employeeNumber, employees.firstName, employees.lastName, COUNT(customers.customerNumber) AS num_customer
+SELECT employees.employeeNumber, employees.firstName, employees.lastName, COUNT(customers.customerNumber) AS num_customers
 FROM employees
 JOIN customers
    ON employees.employeeNumber = customers.salesRepEmployeeNumber
