@@ -106,17 +106,17 @@ df_product_sold = pd.read_sql(
 # Replace None with your code
 df_total_customers = pd.read_sql(
     """
-    SELECT COUNT(customers.customerNumber) AS n_customers,
-           offices.officeCode,
-           offices.city
-    FROM offices
-    LEFT JOIN employees
-        ON offices.officeCode = employees.officeCode
-    LEFT JOIN customers
-        ON employees.employeeNumber = customers.salesRepEmployeeNumber
-    GROUP BY offices.officeCode,
-             offices.city
-    ORDER BY offices.officeCode;
+    SELECT COUNT(c.customerNumber) AS n_customers,
+           o.officeCode,
+           o.city
+    FROM offices o
+    LEFT JOIN employees e
+        ON o.officeCode = e.officeCode
+    LEFT JOIN customers c
+        ON e.employeeNumber = c.salesRepEmployeeNumber
+    GROUP BY o.officeCode,
+             o.city
+    ORDER BY o.officeCode;
     """,
     conn
 )
