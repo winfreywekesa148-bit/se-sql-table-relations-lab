@@ -102,7 +102,22 @@ ORDER BY offices.officeCode;
 
 # STEP 9
 # Replace None with your code
-df_customers = None
+df_customers =  pd.read_sql(
+    """
+    SELECT products.productName,
+           products.productCode,
+           COUNT(DISTINCT orders.customerNumber) AS numpurchasers
+    FROM products
+    JOIN orderdetails
+        ON products.productCode = orderdetails.productCode
+    JOIN orders
+        ON orderdetails.orderNumber = orders.orderNumber
+    GROUP BY products.productCode,
+             products.productName
+    ORDER BY numpurchasers DESC;
+    """,
+    conn
+)
 
 # STEP 10
 # Replace None with your code
