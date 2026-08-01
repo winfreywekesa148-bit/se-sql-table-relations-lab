@@ -125,16 +125,16 @@ df_total_customers = pd.read_sql(
 # Replace None with your code
 df_customers =  pd.read_sql(
     """
-    SELECT products.productName,
-           products.productCode,
-           COUNT(DISTINCT orders.customerNumber) AS numpurchasers
-    FROM products
-    JOIN orderdetails
-        ON products.productCode = orderdetails.productCode
-    JOIN orders
-        ON orderdetails.orderNumber = orders.orderNumber
-    GROUP BY products.productCode,
-             products.productName
+    SELECT p.productName,
+           p.productCode,
+           COUNT(DISTINCT o.customerNumber) AS numpurchasers
+    FROM products p
+    JOIN orderdetails od
+        ON p.productCode = od.productCode
+    JOIN orders o
+        ON od.orderNumber = o.orderNumber
+    GROUP BY p.productCode,
+             p.productName
     ORDER BY numpurchasers DESC;
     """,
     conn
